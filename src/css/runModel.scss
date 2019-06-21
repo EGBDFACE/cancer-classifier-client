@@ -1,0 +1,247 @@
+@import './base.scss';
+
+
+.btn-upload {
+	display: inline-block;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 0 88px;
+	height: 54px;
+	line-height: 54px;
+	border: 2px solid $font-color;
+	border-radius: 4px;
+	font-weight: 500;
+
+	.fileInput {
+		position: absolute;
+		visibility: hidden;
+	}
+
+	.icon-upload {
+		display: inline-block;
+		margin-right: 14px;
+		vertical-align: text-bottom;
+		background: url('../css/img/upload.png');
+		width: 23px;
+		height: 22px;
+		background-size: 23px 22px;
+	}
+}
+
+.model-wrapper {
+	.main {
+		margin: 53px 200px 0;
+		.process {
+			position: relative;
+			counter-reset: step;
+			.line {
+				position: absolute;
+				top: 0;
+				left: 11px;
+				width: 1px;
+				height: 100%;
+				background-color: $line-color;
+				z-index: -1;
+			}
+			li {
+				.step-info {
+					position: relative;
+					padding-left: 35px;
+					font-size: 14px;
+					color: $font-color-gray;
+					&::before {
+						position: absolute;
+						background-color: $bg-color;
+						left: 0;
+						text-align: center;
+						counter-increment: step;
+						content: counter(step);
+						font-size: 13px;
+						width: 18px;
+						height: 18px;
+						border: 1.5px solid $font-color-gray;
+						border-radius: 50%;
+					}
+				}
+				.file-list-wrapper {
+						margin: 38px 80px 42px;
+						table {
+							width: 100%;
+							padding: 10px 0 20px;
+							thead {
+								tr {
+									height: 50px;
+								}
+								font-size: 13px;
+								color: $font-color-gray;
+							}
+							tbody {
+								tr {
+									height: 52px;
+									line-height: 52px;
+								}
+								.file-name {
+									font-weight: 600;
+									white-space: nowrap;
+									overflow: hidden;
+									text-overflow: ellipsis;
+									max-width: 0;
+									.icon-vcf {
+										vertical-align: middle;
+										margin-right: 15px;
+										display: inline-block;
+										width: 26px;
+										height: 20px;
+										background: url('../css/img/vcf.png') center / 26px 20px;
+									}
+								}
+								.file-size {
+									color: $tip-color;
+									font-size: 12px;
+								}
+							}
+						}
+						.btn-addfiles {
+							@extend .btn-upload;
+							height: 48px;
+							line-height: 48px;
+							padding: 0 40px;
+							margin-bottom: 38px;
+						}
+					}
+				.upload-wrapper {
+					margin-top: 29px;
+					background-color: $bg-box;
+					border-radius: 4px;
+					.upload {
+						padding: 70px 0 60px;
+						text-align: center;
+						.addition {
+							width: 360px;
+							font-size: 13px;
+							margin: auto;
+							margin-top: 28px;
+							color: $tip-color;
+							display: flex;
+							justify-content: space-evenly;
+						}
+					}
+				}
+				&.run-classifier-wrapper {
+					margin-top: 41px;
+					.classifier-wrapper {
+						margin-top: 29px;
+						background-color: $bg-box;
+						border-radius: 4px;
+						.classifier {
+							padding: 42px 80px;
+							.choose-model {
+								p {
+									font-size: 13px;
+									color: $font-color-gray;
+								}
+								.model-menu {
+									margin-top: 24px;
+									.our-model {
+										display: inline-block;
+										.btn-model {
+											display: inline-block;
+											border-radius: 4px;
+											padding: 0 80px;
+											border: 2px solid $font-color;
+											height: 90px;
+											line-height: 90px;
+											.icon-classifier {
+												vertical-align: middle;
+												display: inline-block;
+												background: url('../css/img/ourModel.png');
+												width: 60px;
+												height: 60px;
+												background-size: 60px 60px;
+											}
+										}
+										p {
+											margin-top: 13px;
+											font-weight: 600;
+											text-align: center;
+										}
+									}
+									.tip-compare {
+										display: inline-block;
+										vertical-align: top;
+										margin: 0 50px;
+										font-weight: 600;
+										color: $font-color-gray;
+										line-height: 90px;
+									}
+									.classifiers {
+										display: inline-block;
+										vertical-align: top;
+										li {
+											&:last-child {
+												margin-top: 10px;
+											}
+											a {
+												display: inline-block;
+												text-align: center;
+												border-radius: 4px;
+												background-color: $bg-color;
+												border: 1px solid $tip-color;
+												height: 40px;
+												color: $tip-color;
+												font-weight: 600;
+												line-height: 40px;
+												&.classifier-deepgene,
+												&.classifier-svm {
+													width: 138px;
+													margin-right: 18px;
+												}
+												&.classifier-dnn,
+												&.classifier-lr {
+													width: 200px;
+												}
+										}}
+									}
+								}
+							}
+							.run-classifier {
+								margin-top: 34px;
+								p {
+									font-size: 13px;
+									color: $font-color-gray;
+								}
+								.btn-classifier {
+									display: inline-block;
+									border: 2px solid $font-color;
+									border-radius: 4px;
+									margin-top: 24px;
+									padding: 0 54px;
+									height: 48px;
+									line-height: 48px;
+									font-weight: 600;
+									.icon-run-model {
+										vertical-align: middle;
+										display: inline-block;
+										background: url('../css/img/runModel.png');
+										width: 23px;
+										height: 22px;
+										background-size: 23px 22px;
+										margin-right: 14px;
+									}
+								}
+							}
+						}
+					}
+				}
+				&.result {
+					margin-top: 49px;
+					.results-wrapper {
+						margin-top: 29px;
+						background-color: $bg-box;
+						border-radius: 4px;
+					}
+				}
+			}
+		}
+	}
+}

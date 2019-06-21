@@ -97,16 +97,19 @@ function fileSplit(inputFile: any, uploadedData: pullChunkRes,totalFileMd5:strin
 
     let uploadChunksNumber: number = chunksNumber;
     function loadChunks(preStart: number, preEnd: number){
-        if(currentChunk === 0){
-            chunkStart = preStart;
-            chunkEnd = (preEnd > inputFile.size) ? inputFile.size : preEnd;
-        }else if(preEnd + currentChunk * UNIT_CHUNK_SIZE > MAX_CHUNK_SIZE){
-            chunkStart = preEnd;
-            chunkEnd = (chunkStart + MAX_CHUNK_SIZE > inputFile.size) ? inputFile.size : chunkStart + MAX_CHUNK_SIZE;
-        }else{
-            chunkStart = preEnd;
-            chunkEnd = (chunkStart + currentChunk * UNIT_CHUNK_SIZE > inputFile.size) ? inputFile.size : chunkStart + currentChunk * UNIT_CHUNK_SIZE;
-        }
+        // if(currentChunk === 0){
+        //     chunkStart = preStart;
+        //     chunkEnd = (preEnd > inputFile.size) ? inputFile.size : preEnd;
+        // }else if(preEnd + currentChunk * UNIT_CHUNK_SIZE > MAX_CHUNK_SIZE){
+        //     chunkStart = preEnd;
+        //     chunkEnd = (chunkStart + MAX_CHUNK_SIZE > inputFile.size) ? inputFile.size : chunkStart + MAX_CHUNK_SIZE;
+        // }else{
+        //     chunkStart = preEnd;
+        //     chunkEnd = (chunkStart + currentChunk * UNIT_CHUNK_SIZE > inputFile.size) ? inputFile.size : chunkStart + currentChunk * UNIT_CHUNK_SIZE;
+        // }
+        chunkStart = currentChunk * UNIT_CHUNK_SIZE;
+        chunkEnd = (currentChunk + 1) * UNIT_CHUNK_SIZE;
+        chunkEnd = chunkEnd > inputFile.size ? inputFile.size : chunkEnd;
         chunkFileReader.readAsText(blobSlice.call(inputFile, chunkStart, chunkEnd));
     }
 
@@ -120,7 +123,7 @@ function fileSplit(inputFile: any, uploadedData: pullChunkRes,totalFileMd5:strin
 
         if(uploadedData.fileStatus == 'posting'){
             let list = uploadedData.uploadedChunkList;
-            
+            // 已有的chunk进行跳过
             for(let i=0; i<list.length; i++){
                 if(currentChunkSparkMd5 === list[i]){
                     chunkUploadedFlag = true;
@@ -151,20 +154,24 @@ function fileSplit(inputFile: any, uploadedData: pullChunkRes,totalFileMd5:strin
 
 }
 
-function getChunksNumber(inputFile:any){
-    let computeSize: number = 0,
-        chunksNumber: number = 0;
+// function getChunksNumber(inputFile:any){
+//     let computeSize: number = 0,
+//         chunksNumber: number = 0;
 
-    while(computeSize < inputFile.size){
-        if(computeSize === 0){
-            computeSize = FIRST_CHUNK_SIZE;
-        }else if(computeSize + chunksNumber * UNIT_CHUNK_SIZE <= MAX_CHUNK_SIZE){
-            computeSize += chunksNumber * UNIT_CHUNK_SIZE;
-        }else if(computeSize + chunksNumber * UNIT_CHUNK_SIZE > MAX_CHUNK_SIZE){
-            computeSize += MAX_CHUNK_SIZE;
-        }
-        chunksNumber++;
-    }
+//     while(computeSize < inputFile.size){
+//         if(computeSize === 0){
+//             computeSize = FIRST_CHUNK_SIZE;
+//         }else if(computeSize + chunksNumber * UNIT_CHUNK_SIZE <= MAX_CHUNK_SIZE){
+//             computeSize += chunksNumber * UNIT_CHUNK_SIZE;
+//         }else if(computeSize + chunksNumber * UNIT_CHUNK_SIZE > MAX_CHUNK_SIZE){
+//             computeSize += MAX_CHUNK_SIZE;
+//         }
+//         chunksNumber++;
+//     }
 
-    return chunksNumber;
+//     return chunksNumber;
+// }
+
+function getChunksNumber(inputFile:any) {
+    return Math.ceil(inputFile.size / UNIT_CHUNK_SIZE)
 }

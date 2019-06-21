@@ -13,7 +13,7 @@ interface chunk{
 }
 
 export function chunkFileUpload(item: chunk_result_item[], fileMd5: string, chunkMd5: string, chunksNumber: number, chunkNumber: number){
-    let chunkData: chunk = { 
+    let chunkData: chunk = {
         chunkData: item,
         fileMd5: fileMd5,
         chunkMd5: chunkMd5,

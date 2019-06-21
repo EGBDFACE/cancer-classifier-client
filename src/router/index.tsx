@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Loadable from 'react-loadable';
 import store from '../store';
-import '@/css/index.scss';
-import Home from '../containers/HomePage';
+import '@/css/base.scss';
+// import Home from '../containers/HomePage';
+import Home from '../pages/Home'
 // import {Route,BrowserRouter as Router} from 'react-router-dom';
 // import { Route, HashRouter as Router } from 'react-router-dom';
+import RunModel from '../pages/RunModel'
 import { Route, Router } from 'react-router-dom';
 import history from './history';
 
@@ -21,8 +23,7 @@ export default (
     <Router history={history}>
         <div>
             <Route exact path="/" component={Home}/>
-            <Route path='/signIn' component={SignIn}/>
-            <Route path='/signUp' component={SignUp}/>
+            <Route path="/runModel" component={RunModel}/>
         </div>
     </Router>
 );

@@ -78,7 +78,7 @@ module.exports = {
     // },
     plugins:[
         new HtmlWebpackPlugin({
-            template: '!!ejs-loader!./template.html'
+            template: '!!ejs-loader!./index.html'
         })
     ],
     // node:{

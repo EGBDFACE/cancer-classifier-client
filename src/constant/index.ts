@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://222.20.79.250:8081/api/';
+export const BASE_URL = 'http://222.20.79.250:9090/api/';
 
 export const FIRST_CHUNK_SIZE = 10 * 1024; //10K
 // export const FIRST_CHUNK_SIZE = 1024 * 1024; //1M for test

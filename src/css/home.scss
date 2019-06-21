@@ -1,0 +1,54 @@
+@import './base.scss';
+.main {
+	.title {
+		p {
+			font-size: 20px;
+			font-weight: $font-semibold;
+		}
+	}
+	.method {
+		margin-top: 34px;
+		p {
+			font-size: $font-size-m;
+			line-height: 50px;
+		}
+	}
+	.run-model-wrapper {
+		margin-top: 56px;
+		.btn-run-model {
+			display: inline-block;
+			border: 1px solid #000000;
+			border-radius: 4px;
+			padding: 16px 34px;
+			font-size: 16px;
+			font-weight: 500;
+			.icon-run-model {
+				margin-right: 14px;
+				display: inline-block;
+				vertical-align: middle;
+				width: 23px;
+				height: 22px;
+				background-image: url('./img/runModel.png');
+				background-size: 23px 22px; 
+			}
+		}
+	}
+	.method-arc-wrapper {
+		margin: 72px 0 67px;
+	}
+}
+
+.footer {
+	display: flex;
+	justify-content: space-between;
+	.data-src {
+		color: $font-color-tips;
+		font-size: $font-size-xs;
+		line-height: 16px;
+	}
+	.copyright {
+		color: $font-color-tips;
+		font-size: $font-size-xs;
+		align-self: flex-end;
+	}
+}
