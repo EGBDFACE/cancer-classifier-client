@@ -1,19 +1,21 @@
 import * as React from 'react'
 import * as SparkMD5 from 'spark-md5';
 import axios from 'axios'
-import { BASE_URL } from '../constant';
+import { BASE_URL, CANCER_LABEL as cancerLabel } from '../constant';
 import '@/css/runModel.scss'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { resolve } from 'dns';
 import { rejects } from 'assert';
+import { booleanLiteral } from '@babel/types';
 
 interface FileItem {
 	fileMD5: string
 	fileName: string
 	fileSize: number
 	fileObj: any
-	label: string
+	label: string,
+	labelChooseFlag: boolean,
 	progress: number,
 	score: number,
 	uploaded: boolean,
@@ -26,8 +28,9 @@ interface Props {
 }
 
 interface States {
-	fileStatus: string
-	fileObj: any
+	applyAllFileItemFlag: boolean,
+	fileStatus: string,
+	fileObj: any,
 	fileList: FileItem[],
 	showClassifier: boolean,
 	showResults: boolean
@@ -40,6 +43,7 @@ export default class RunModel extends React.Component<Props, States> {
 	constructor(props: Props) {
 		super(props)
 		this.state = {
+			applyAllFileItemFlag: false,
 			fileStatus: 'FILE_NOT_SELECTED',
 			fileObj: null,
 			fileList: [],
@@ -48,9 +52,46 @@ export default class RunModel extends React.Component<Props, States> {
 		}
 		this.fileInput = React.createRef()
 		this.timeStamp = new Date().getTime()
-		this.count = 0
+		this.count = 0;
+		this.handleFileItemLabelClick = this.handleFileItemLabelClick.bind(this);
+		this.handleFileItemTypeClick = this.handleFileItemTypeClick.bind(this);
+		this.handleApplyAllFileItemFlagChange = this.handleApplyAllFileItemFlagChange.bind(this);
 	}
-
+	handleApplyAllFileItemFlagChange = (itemIndex: number) => (e:any) => {
+		const {fileList} = this.state;
+		const newFileList = JSON.parse(JSON.stringify(fileList));
+		newFileList[itemIndex].labelChooseFlag = true;
+		this.setState({
+			applyAllFileItemFlag: e.target.checked,
+			fileList: newFileList
+		});
+	}
+	handleFileItemTypeClick = (itemIndex:number, label:string) => (e:any) => {
+		// e.preventDefault();
+		e.stopPropagation();
+		if(label === cancerLabel[cancerLabel.length-1]) return;
+		const { applyAllFileItemFlag, fileList } = this.state;
+		const newFileList: FileItem[] = JSON.parse(JSON.stringify(fileList));
+		if(applyAllFileItemFlag){
+			for(let i=0; i<newFileList.length; i++){
+				newFileList[i].label = label
+			}
+		}else{
+			newFileList[itemIndex].label = label;
+		}
+		newFileList[itemIndex].labelChooseFlag = false;
+		this.setState({
+			fileList: newFileList
+		})
+	}
+	handleFileItemLabelClick = (index:number) => (e:any) => {
+		const { fileList }= this.state;
+		const newFileList = JSON.parse(JSON.stringify(fileList));
+		newFileList[index].labelChooseFlag = !fileList[index].labelChooseFlag;
+		this.setState({
+			fileList: newFileList
+		})
+	}
 	initialUpload(value: any) {
 		this.setState({
 			showClassifier: true
@@ -72,6 +113,7 @@ export default class RunModel extends React.Component<Props, States> {
 				fileObj: value[i],
 				progress: 0,
 				label: '',
+				labelChooseFlag: false,
 				score: 0,
 				uploaded: false,
 				predicted: false,
@@ -251,13 +293,43 @@ export default class RunModel extends React.Component<Props, States> {
 	}
 
 	renderUploadingList(fileList: FileItem[]) {
+		const { applyAllFileItemFlag } = this.state;
 		return fileList.map((v, i) => (
 			<tr
 				className="file-list"
 				key={i}>
-				<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
+				<td className="file-name">
+					<div className='file-progress'>{v.progress+'%'}</div>
+					<i className="icon-vcf"></i>
+					{v.fileName}</td>
 				<td className="file-size">{v.fileSize > 1024 ? (v.fileSize / 1024).toFixed(2) + ' MB' : v.fileSize.toFixed(2) + ' KB'}</td>
-				<td className="file-type">{v.progress + '%'}</td>
+				<td className="file-type"
+					onClick={this.handleFileItemLabelClick(i)}
+					>
+					{v.label.length === 0 && <strong>
+						Choose One Type
+					</strong> }
+					{v.label.length !== 0 && <strong>
+						{v.label}
+					</strong>}
+					<i className="file-type_choose-icon" />
+					{ v.labelChooseFlag && <div className="file-type_menu">
+						{cancerLabel.map((value,index) => (
+							<span className='file-type_menu-item'
+								onClick={this.handleFileItemTypeClick(i,value)}
+								key={index}>
+								{value}
+							</span>
+						))}
+						<div className='file-type_menu-selectAll'>
+							<input type='checkbox' 
+								className='selectAll-input'
+								checked={applyAllFileItemFlag}
+								onChange={this.handleApplyAllFileItemFlagChange(i)} />
+							<span>apply to all VCF files</span>
+						</div>
+					</div>}
+				</td>
 			</tr>
 		))
 	}
@@ -328,7 +400,8 @@ export default class RunModel extends React.Component<Props, States> {
 				key={i}>
 				<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
 				<td className="file-size">{v.label}</td>
-				<td className="file-type">{v.score}</td>
+				{/* <td className="file-type">{v.score}</td> */}
+				<td>{v.score}</td>
 			</tr>
 		))
 	}

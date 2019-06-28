@@ -245,3 +245,54 @@
 		}
 	}
 }
+.file-type{
+	border-bottom: 2px solid;
+	white-space: nowrap;
+	cursor: pointer;
+	position: relative;
+}
+.file-type_choose-icon{
+	background-image: url('./img/dropDownIcon.svg');
+	background-repeat: no-repeat;
+	display: inline-block;
+	width: 12px;
+	height: 8px;
+	// margin-left: 15px;
+	position: absolute;
+	top: 50%;
+	margin-top: -4px;
+	right: 0;
+}
+.file-type_menu{
+	position: absolute;
+	background-color: #DDDDDD;
+	width: 300px;
+	overflow: hidden;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	right: 0;
+	padding: 10px 0 10px 20px;
+	border-top: 2px solid;
+	z-index: 2;
+}
+.file-type_menu-item{
+	width: 30%;
+	height: 30px;
+	line-height: 30px;
+	margin-right: 3%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.file-type_menu-selectAll{
+	width: 100%;
+}
+.selectAll-input{
+	margin-right: 10px;
+	cursor: pointer;
+}
+.file-progress{
+	position: absolute;
+	left: 35px;
+}
