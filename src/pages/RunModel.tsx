@@ -4,6 +4,7 @@ import axios from 'axios'
 import { BASE_URL, CANCER_LABEL as cancerLabel } from '../constant';
 import '@/css/runModel.scss'
 import Header from '../components/Header'
+import LoadingLabel from '../components/LoadingLabel';
 import Footer from '../components/Footer'
 import { resolve } from 'dns';
 import { rejects } from 'assert';
@@ -18,6 +19,7 @@ interface FileItem {
 	labelChooseFlag: boolean,
 	progress: number,
 	score: number,
+	status: string,
 	uploaded: boolean,
 	predicted: boolean,
 	id: string
@@ -115,6 +117,7 @@ export default class RunModel extends React.Component<Props, States> {
 				label: '',
 				labelChooseFlag: false,
 				score: 0,
+				status: 'PREPARE_TO_RUN',
 				uploaded: false,
 				predicted: false,
 				id: this.timeStamp + '-' + this.count
@@ -192,7 +195,14 @@ export default class RunModel extends React.Component<Props, States> {
 	}
 
 	runModel() {
+		const { fileList } = this.state;
+		const newFileList: FileItem[] = [];
+		for(let i=0; i<fileList.length; i++){
+			newFileList[i] = fileList[i];
+			newFileList[i].status = 'RUNNING';
+		}
 		this.setState({
+			fileList: newFileList,
 			showResults: true
 		})
 		// 只处理未预测的文件
@@ -221,6 +231,7 @@ export default class RunModel extends React.Component<Props, States> {
 				this.updateFileList(function (fileItem: FileItem) {
 					if (fileItem.fileMD5 == value.fileMD5) {
 						fileItem.score = res.data
+						fileItem.status = 'RUN_SUCCESS';
 						fileItem.predicted = true
 					}
 				})
@@ -258,9 +269,9 @@ export default class RunModel extends React.Component<Props, States> {
 					<div className="file-list-wrapper">
 						<table className="file-table">
 							<colgroup>
-								<col style={{'width': '70%'}}/>
-								<col style={{'width': '15%'}}/>
-								<col style={{'width': '15%'}}/>
+								<col style={{'width': '60%'}}/>
+								<col style={{'width': '20%'}}/>
+								<col style={{'width': '20%'}}/>
 							</colgroup>
 							<thead>
 								<tr>
@@ -386,24 +397,51 @@ export default class RunModel extends React.Component<Props, States> {
 						</tr>
 					</thead>
 					<tbody>
-						{this.renderResultList(this.state.fileList)}
+						{/* {this.renderResultList(this.state.fileList)} */}
+						{this.state.fileList.map((value,index)=>this.renderResultList(value,index))}
 					</tbody>
 				</table>
 			</div>
 		)
 	}
 
-	renderResultList(fileList: FileItem[]) {
-		return fileList.map((v, i) => (
-			<tr
-				className="file-list"
-				key={i}>
-				<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
-				<td className="file-size">{v.label}</td>
-				{/* <td className="file-type">{v.score}</td> */}
-				<td>{v.score}</td>
-			</tr>
-		))
+	// renderResultList(fileList: FileItem[]) {
+	// 	return fileList.map((v, i) => (
+	// 		<tr
+	// 			className="file-list"
+	// 			key={i}>
+	// 			<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
+	// 			<td className="file-size">{v.label}</td>
+	// 			<td>{v.score}</td>
+	// 		</tr>
+	// 	))
+	// }
+	renderResultList(v: FileItem, i: number){
+		if(v.status === 'PREPARE_TO_RUN'){
+			return null
+		}else if(v.status === 'RUNNING'){
+			return(
+				<tr
+					className="file-list"
+					key={i}>
+					<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
+					<td className="file-size">{v.label}</td>
+					<td>
+						<LoadingLabel index={i} />
+					</td>
+				</tr>
+			)
+		}else{
+			return(
+				<tr
+					className="file-list"
+					key={i}>
+					<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
+					<td className="file-size">{v.label}</td>
+					<td>{v.score}</td>
+				</tr>
+			)
+		}
 	}
 
 	render() {
