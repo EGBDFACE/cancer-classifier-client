@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --color --progress --config webpack.dev.config.js ",
-    "build": "webpack --progress --colors --config webpack.dev.config.js",
+    "build": "webpack --progress --colors --config webpack.prod.config.js",
     "start": "npm run dev",
     "rebuild": "rm -rf dist | npm run build",
     "test": "jest"
