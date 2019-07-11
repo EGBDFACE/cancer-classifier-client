@@ -1,9 +1,10 @@
 @import './base.scss';
 .main {
 	.title {
-		p {
+		.title_info {
 			font-size: 20px;
 			font-weight: $font-semibold;
+			margin-top: 8px;
 		}
 	}
 	.method {
@@ -22,6 +23,11 @@
 			padding: 16px 34px;
 			font-size: 16px;
 			font-weight: 500;
+			color: #000;
+			&:hover{
+				border-color: #0000ff;
+				transition: .2s;
+			}
 			.icon-run-model {
 				margin-right: 14px;
 				display: inline-block;
@@ -36,6 +42,13 @@
 	.method-arc-wrapper {
 		margin: 72px 0 67px;
 	}
+}
+.title_cancer-type{
+	border-bottom: 1.5px solid;
+	font-size: 16px;
+	font-weight: 600;
+	display: inline-block;
+	margin-top: 8px;
 }
 
 .footer {

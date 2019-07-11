@@ -18,11 +18,18 @@ interface FileItem {
 	label: string,
 	labelChooseFlag: boolean,
 	progress: number,
-	score: number,
+	// score: number,
+	score: string,
 	status: string,
 	uploaded: boolean,
 	predicted: boolean,
 	id: string
+}
+
+interface IExcelData{
+	name: string,
+	rawLabel: string,
+	result: string
 }
 
 interface Props {
@@ -58,7 +65,29 @@ export default class RunModel extends React.Component<Props, States> {
 		this.handleFileItemLabelClick = this.handleFileItemLabelClick.bind(this);
 		this.handleFileItemTypeClick = this.handleFileItemTypeClick.bind(this);
 		this.handleApplyAllFileItemFlagChange = this.handleApplyAllFileItemFlagChange.bind(this);
+		this.createExcelFileDown = this.createExcelFileDown.bind(this);
 	}
+	createExcelFileDown(){
+		let resultStr = 'Sample Name,Raw Label,Our Classifier\n';
+		const { fileList } = this.state;
+		for(let i=0; i<fileList.length; i++){
+			resultStr += fileList[i].fileName + '\t,'
+					+fileList[i].label + '\t,'
+					+fileList[i].score + '\t,'
+					+'\n';
+			if(fileList[i].status !== 'RUN_SUCCESS'){
+				return;
+			}
+		}
+		let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(resultStr);
+		let link = document.createElement('a');
+		link.href = uri;
+		link.download = 'result.csv';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
+
 	handleApplyAllFileItemFlagChange = (itemIndex: number) => (e:any) => {
 		const {fileList} = this.state;
 		const newFileList = JSON.parse(JSON.stringify(fileList));
@@ -67,6 +96,7 @@ export default class RunModel extends React.Component<Props, States> {
 			applyAllFileItemFlag: e.target.checked,
 			fileList: newFileList
 		});
+		// this.createExcelFileDown();
 	}
 	handleFileItemTypeClick = (itemIndex:number, label:string) => (e:any) => {
 		// e.preventDefault();
@@ -85,6 +115,7 @@ export default class RunModel extends React.Component<Props, States> {
 		this.setState({
 			fileList: newFileList
 		})
+		this.createExcelFileDown();
 	}
 	handleFileItemLabelClick = (index:number) => (e:any) => {
 		const { fileList }= this.state;
@@ -116,7 +147,7 @@ export default class RunModel extends React.Component<Props, States> {
 				progress: 0,
 				label: '',
 				labelChooseFlag: false,
-				score: 0,
+				score: '',
 				status: 'PREPARE_TO_RUN',
 				uploaded: false,
 				predicted: false,
@@ -141,10 +172,19 @@ export default class RunModel extends React.Component<Props, States> {
 	}
 
 	updateFileList(callback: Function) {
-		const fileList = this.state.fileList.slice()
+		const fileList = this.state.fileList.slice();
+		// let allDoneFlag = true;
 		for (let i = 0; i < fileList.length; i++) {
 			callback(fileList[i])
+			if(fileList[i].status !== 'RUN_SUCCESS'){
+				// allDoneFlag = false;
+			}
 		}
+		// if(allDoneFlag){
+		// 	this.createExcelFileDown();
+		// 	// console.log(exportData);
+		// }
+		this.createExcelFileDown();
 		this.setState({
 			fileList: JSON.parse(JSON.stringify(fileList))
 		})
@@ -199,7 +239,7 @@ export default class RunModel extends React.Component<Props, States> {
 		const newFileList: FileItem[] = [];
 		for(let i=0; i<fileList.length; i++){
 			newFileList[i] = fileList[i];
-			newFileList[i].status = 'RUNNING';
+			newFileList[i].status = (fileList[i].status !=='RUN_SUCCESS') ? 'RUNNING': 'RUN_SUCCESS';
 		}
 		this.setState({
 			fileList: newFileList,
@@ -210,13 +250,14 @@ export default class RunModel extends React.Component<Props, States> {
 	}
 
 	runModelFiles(value: any) {
-		console.log(value)
+		// console.log(value)
 		for (let i = 0; i < value.length; i++) {
 			this.runModelFile(value[i])
 		}
 	}
 
 	runModelFile(value: FileItem) {
+		// const { fileList } = this.state;
 		return new Promise((resolve, reject) => {
 			axios({
 				method: 'POST',
@@ -346,6 +387,7 @@ export default class RunModel extends React.Component<Props, States> {
 	}
 
 	renderClassifier() {
+		const { showResults } = this.state;
 		return (
 			<div className="classifier">
 				<div className="choose-model">
@@ -374,7 +416,7 @@ export default class RunModel extends React.Component<Props, States> {
 					<p>Run Cancer Classifier</p>
 					<a 
 						className="btn-classifier"
-						onClick={() => this.runModel()}><i className="icon-run-model"></i>Run it Now</a>
+						onClick={() => this.runModel()}><i className="icon-run-model"></i>{!showResults ? 'Run it now' : 'Run Again'}</a>
 				</div>
 			</div>
 		)
@@ -417,6 +459,12 @@ export default class RunModel extends React.Component<Props, States> {
 	// 	))
 	// }
 	renderResultList(v: FileItem, i: number){
+		let wrongLabelStyle = undefined;
+		if(v.score.slice(0,v.score.indexOf('\t')) !== v.label){
+			wrongLabelStyle = {
+				color: '#D0021B'
+			}
+		}
 		if(v.status === 'PREPARE_TO_RUN'){
 			return null
 		}else if(v.status === 'RUNNING'){
@@ -432,13 +480,17 @@ export default class RunModel extends React.Component<Props, States> {
 				</tr>
 			)
 		}else{
+			
 			return(
 				<tr
 					className="file-list"
 					key={i}>
 					<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
-					<td className="file-size">{v.label}</td>
-					<td>{v.score}</td>
+					<td className="file-result_rawlabel">{v.label}</td>
+					<td className="file-result_score">
+						<span className="result_score-label" style={wrongLabelStyle}>{v.score.slice(0,v.score.indexOf('\t'))}</span>
+						<span className="result_score-number">{v.score.slice(v.score.indexOf('\t')+1)}</span>
+					</td>
 				</tr>
 			)
 		}
