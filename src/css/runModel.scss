@@ -11,7 +11,10 @@
 	border: 2px solid $font-color;
 	border-radius: 4px;
 	font-weight: 500;
-
+	&:hover{
+		border-color: #0000ff;
+		transition: .2s;
+	}
 	.fileInput {
 		position: absolute;
 		visibility: hidden;
@@ -86,6 +89,7 @@
 									overflow: hidden;
 									text-overflow: ellipsis;
 									max-width: 0;
+									padding-right: 20px;
 									.icon-vcf {
 										vertical-align: middle;
 										margin-right: 15px;
@@ -219,6 +223,10 @@
 									height: 48px;
 									line-height: 48px;
 									font-weight: 600;
+									&:hover{
+										border-color: #0000ff;
+										transition: .2s;
+									}
 									.icon-run-model {
 										vertical-align: middle;
 										display: inline-block;
@@ -295,4 +303,20 @@
 .file-progress{
 	position: absolute;
 	left: 35px;
+}
+.file-result_rawlabel{
+	font-weight: 600;
+}
+.file-result_score{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.result_score-label{
+	font-weight: 600;
+	color: #0BC044;
+	margin-right: 10px;
+}
+.result_score-number{
+	color: #444444;
 }
