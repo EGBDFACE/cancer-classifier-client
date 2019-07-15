@@ -115,7 +115,7 @@ export default class RunModel extends React.Component<Props, States> {
 		this.setState({
 			fileList: newFileList
 		})
-		this.createExcelFileDown();
+		// this.createExcelFileDown();
 	}
 	handleFileItemLabelClick = (index:number) => (e:any) => {
 		const { fileList }= this.state;
@@ -184,7 +184,7 @@ export default class RunModel extends React.Component<Props, States> {
 		// 	this.createExcelFileDown();
 		// 	// console.log(exportData);
 		// }
-		this.createExcelFileDown();
+		// this.createExcelFileDown();
 		this.setState({
 			fileList: JSON.parse(JSON.stringify(fileList))
 		})
@@ -460,9 +460,14 @@ export default class RunModel extends React.Component<Props, States> {
 	// }
 	renderResultList(v: FileItem, i: number){
 		let wrongLabelStyle = undefined;
-		if(v.score.slice(0,v.score.indexOf('\t')) !== v.label){
+		if((v.score.slice(0,v.score.indexOf('\t')) !== v.label)&&(v.label !== '')){
 			wrongLabelStyle = {
 				color: '#D0021B'
+			}
+		}
+		if(v.label == ''){
+			wrongLabelStyle = {
+				color: '#444444'
 			}
 		}
 		if(v.status === 'PREPARE_TO_RUN'){
@@ -517,6 +522,11 @@ export default class RunModel extends React.Component<Props, States> {
 						</li>
 						<li className="result">
 							<p className="step-info">Explore results</p>
+							{this.state.showResults && <div className="wrapper_download-excel"
+															onClick={this.createExcelFileDown}>
+									<i className='download-excel_icon' />
+									<p className='download-excel_info'>Export as Excel</p>
+								</div>}
 							<div className="results-wrapper">
 								{this.state.showResults && this.renderResults()}
 							</div>

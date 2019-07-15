@@ -1,0 +1,17 @@
+
+<svg width="25px" height="24px" viewBox="0 0 25 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Load-your-data---Results" transform="translate(-1134.000000, -982.000000)" stroke-width="1.02325581">
+            <g id="if_aami4-47_590083" transform="translate(1135.000000, 983.000000)">
+                <path d="M23,14.3255814 L23,20.9767442 C23,21.5395349 22.5295455,22 21.9545455,22 L1.04545455,22 C0.470454545,22 0,21.5395349 0,20.9767442 L0,14.3255814 L8.10227273,14.3255814 C8.10227273,16.1674419 9.61818182,17.6511628 11.5,17.6511628 C13.3818182,17.6511628 14.8977273,16.1674419 14.8977273,14.3255814 L23,14.3255814 Z" id="Shape" stroke="#000000"></path>
+                <polyline id="Shape" stroke="#000000" points="14.6363636 4.60465116 19.3409091 4.60465116 23 14.3255814"></polyline>
+                <polyline id="Shape" stroke="#000000" points="0 14.3255814 3.65909091 4.60465116 7.84090909 4.60465116"></polyline>
+                <polyline id="Shape" stroke="#000000" points="9.93181818 0 9.93181818 7.1627907 7.05681818 7.1627907 11.5 11.5116279 15.9431818 7.1627907 14.1136364 7.1627907"></polyline>
+                <path d="M12.5454545,0 L12.5454545,7.1627907" id="Shape" stroke="#2C3E50"></path>
+            </g>
+        </g>
+    </g>
+</svg>

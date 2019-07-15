@@ -20,6 +20,7 @@ export default class Header extends React.Component<Props, States> {
 					<div className="description">
 						<h2>Cancer Classifier</h2>
 						<p>for precisely predicting the classification of 12 cancer types</p>
+						<p className='header_cancer-type'>CESC LUAD BRCA PAAD ACC KIRP STAD PRAD UCS HNSC BLCA LGG</p>
 					</div>
 				</div>}
 			</header>
