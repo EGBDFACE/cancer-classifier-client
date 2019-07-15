@@ -16,7 +16,8 @@ export default class Header extends React.Component<Props, States> {
 		return (
 			<header>
 				{this.props.location.pathname !== '/' && <div className="header">
-					<a className="logo" href="/"></a>
+					{/* <a className="logo" href="/"></a> */}
+					<a className='logo' href='/cancer-classifier' />
 					<div className="description">
 						<h2>Cancer Classifier</h2>
 						<p>for precisely predicting the classification of 12 cancer types</p>
