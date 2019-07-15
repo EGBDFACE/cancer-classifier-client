@@ -243,6 +243,7 @@
 				}
 				&.result {
 					margin-top: 49px;
+					position: relative;
 					.results-wrapper {
 						margin-top: 29px;
 						background-color: $bg-box;
@@ -252,6 +253,27 @@
 			}
 		}
 	}
+}
+.wrapper_download-excel{
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	top: 0;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+}
+.download-excel_icon{
+	background-image: url('./img/download.svg');
+	background-repeat: no-repeat;
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	margin-right: 10px;
+}
+.download-excel_info{
+	font-size: 13px;
+	display: inline;
 }
 .file-type{
 	border-bottom: 2px solid;

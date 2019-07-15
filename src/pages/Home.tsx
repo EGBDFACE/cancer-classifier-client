@@ -34,7 +34,8 @@ export default class Home extends React.Component<Props, States> {
 				<div className="run-model-wrapper">
 					<Link to="/runModel" className="btn-run-model"><i className="icon-run-model"></i>Run Classification</Link>
 				</div>
-				<div className="method-arc-wrapper">
+				<div className="method-arc-wrapper"
+					style={{opacity: 0}}>
 					<img src={require('../css/img/methodArch.png')} width="100%" alt="Method Architecture"/>
 				</div>
 			</div>
