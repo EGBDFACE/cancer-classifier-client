@@ -1,14 +1,11 @@
-import * as React from 'react'
+import * as React from 'react';
 import * as SparkMD5 from 'spark-md5';
-import axios from 'axios'
-import { BASE_URL, CANCER_LABEL as cancerLabel } from '../constant';
-import '@/css/runModel.scss'
-import Header from '../components/Header'
-import LoadingLabel from '../components/LoadingLabel';
-import Footer from '../components/Footer'
-import { resolve } from 'dns';
-import { rejects } from 'assert';
-import { booleanLiteral } from '@babel/types';
+import {  CANCER_LABEL as cancerLabel } from 'src/constant';
+import './style.scss';
+import Header from 'src/components/Header';
+import LoadingLabel from 'src/components/LoadingLabel';
+import Footer from 'src/components/Footer'
+import { fetchGetResult, fetchUploadFile } from 'src/api';
 
 interface FileItem {
 	fileMD5: string
@@ -200,33 +197,27 @@ export default class RunModel extends React.Component<Props, States> {
 					if (fileItem.id == value.id) {
 						fileItem.fileMD5 = fileMD5
 					}
-				})
-				axios({
-					method: 'POST',
-					baseURL: BASE_URL,
-					url: 'uploadFile',
-					data: {
-						fileName: value.fileName,
-						fileMD5: fileMD5,
-						data: e.target.result
-					},
-					onUploadProgress: (progressEvent) => {
-						this.updateFileList(function (fileItem: FileItem) {
+				});
+                const uploadData = {
+                    fileName: value.fileName,
+                    fileMD5: fileMD5,
+                    data: e.target.result
+                };
+                fetchUploadFile(uploadData, this, value)
+                .then((res: any) => {
+					if(res.data.code === '000002'){
+						location.pathname = '/';
+					}else {
+						// 上传成功
+						this.updateFileList(function(fileItem: FileItem) {
 							if (fileItem.id == value.id) {
-								fileItem.progress = Math.floor(progressEvent.loaded / progressEvent.total * 100)
+								fileItem.progress = 100
+								fileItem.uploaded = true
 							}
 						})
+						resolve(res)
 					}
-				}).then(res => {
-					// 上传成功
-					this.updateFileList(function(fileItem: FileItem) {
-						if (fileItem.id == value.id) {
-							fileItem.progress = 100
-							fileItem.uploaded = true
-						}
-					})
-					resolve(res)
-				}).catch(err => {
+				}).catch( (err: any) => {
 					reject(err)
 				})
 			}
@@ -259,25 +250,26 @@ export default class RunModel extends React.Component<Props, States> {
 	runModelFile(value: FileItem) {
 		// const { fileList } = this.state;
 		return new Promise((resolve, reject) => {
-			axios({
-				method: 'POST',
-				baseURL: BASE_URL,
-				url: 'getResult',
-				data: {
-					fileName: value.fileName,
-					fileMD5: value.fileMD5
+            const data = {
+                fileName: value.fileName,
+                fileMD5: value.fileMD5
+            };
+            fetchGetResult(data)
+            .then( (res: any) => {
+				if(res.data.code === '000002'){
+					location.pathname='/';
+				}else{
+					// 模型运行成功
+					this.updateFileList(function (fileItem: FileItem) {
+						if (fileItem.fileMD5 == value.fileMD5) {
+							fileItem.score = res.data
+							fileItem.status = 'RUN_SUCCESS';
+							fileItem.predicted = true
+						}
+					})
+					resolve()
 				}
-			}).then(res => {
-				// 模型运行成功
-				this.updateFileList(function (fileItem: FileItem) {
-					if (fileItem.fileMD5 == value.fileMD5) {
-						fileItem.score = res.data
-						fileItem.status = 'RUN_SUCCESS';
-						fileItem.predicted = true
-					}
-				})
-				resolve()
-			}).catch(err => {
+			}).catch( (err: any) => {
 				reject(err)
 			})
 		})
@@ -502,6 +494,13 @@ export default class RunModel extends React.Component<Props, States> {
 	}
 
 	render() {
+		const token: string = localStorage.getItem('token');
+		const token_exp: string = localStorage.getItem('token_exp');
+		const timeDiff: number = ((new Date().getTime()) - parseInt(token_exp))/60000;
+		if (!token || (timeDiff > 120)) {
+			location.pathname = '/';
+			return;
+		}
 		return (
 			<div className="model-wrapper">
 				<Header location={this.props.location}/>

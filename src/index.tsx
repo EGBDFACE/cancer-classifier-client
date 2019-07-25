@@ -1,12 +1,8 @@
-import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import {Provider} from 'react-redux';
 import route from './router';
-import store from './store';
+import './style.scss';
 
 ReactDom.render(
-    <Provider store= {store}>
-        {route}
-    </Provider>,
+    route,
     document.getElementById('root')
 )
