@@ -1,8 +1,9 @@
-import * as React from 'react'
-import {Link} from 'react-router-dom'
-import '@/css/home.scss'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import * as React from 'react';
+import {Link} from 'react-router-dom';
+// import '@/css/home.scss';
+import './style.scss';
+import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 interface Props {
 	location: any
@@ -16,8 +17,16 @@ export default class Home extends React.Component<Props, States> {
 	constructor(props: Props) {
 		super(props)
 	}
-
+	
 	render() {
+		const token: string = localStorage.getItem('token');
+		const token_exp: string = localStorage.getItem('token_exp');
+		const timeDiff: number = ((new Date().getTime()) - parseInt(token_exp))/60000;
+		if (!token || (timeDiff > 120)) {
+			// location.pathname = '/';
+			location.pathname = '/cancer-classifier';
+			return;
+		}
 		// console.log(this.props)
 		return (
 		<div className="page">

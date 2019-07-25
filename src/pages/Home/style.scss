@@ -1,4 +1,25 @@
-@import './base.scss';
+@import '../../constant/variables.scss';
+
+.emphasis-font {
+	color: $font-white;
+}
+
+.emphasis-font-black {
+	@extend .emphasis-font;
+	background-color: $emphasis-black;
+}
+
+.emphasis-font-blue {
+	@extend .emphasis-font;
+	background-color: $emphasis-blue;
+}
+
+.page {
+    // margin: 108px 200px 0;
+    margin: 0 200px;
+	position: relative;
+}
+
 .main {
 	margin-bottom: 30px;
 	.title {
@@ -35,7 +56,7 @@
 				vertical-align: middle;
 				width: 23px;
 				height: 22px;
-				background-image: url('./img/runModel.png');
+				background-image: url('../../assets/images/runModel.png');
 				background-size: 23px 22px; 
 			}
 		}
@@ -50,29 +71,4 @@
 	font-weight: 600;
 	display: inline-block;
 	margin-top: 8px;
-}
-
-.footer {
-	display: flex;
-	justify-content: space-between;
-	.data-src {
-		color: $font-color-tips;
-		font-size: $font-size-xs;
-		line-height: 16px;
-	}
-	.copyright {
-		color: $font-color-tips;
-		font-size: $font-size-xs;
-		align-self: flex-end;
-	}
-}
-// #loadingLabel > canvas{
-//     width: 20px;
-//     height: 20px;
-// }
-@for $i from 0 to 100{
-	#loadingLabel#{$i} > canvas{
-		width: 20px;
-		height: 20px;
-	}
 }

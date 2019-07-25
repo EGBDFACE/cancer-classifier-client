@@ -1,0 +1,30 @@
+@import '../../constant/variables.scss';
+
+.header {
+	padding: 55px 32px;
+
+	.logo {
+		float: left;
+		width: 60px;
+		height: 60px;
+		background-size: 60px 60px;
+		background-image: url('../../assets/images/logo.png');
+	}
+
+	.description {
+		margin-left: 167px;
+
+		p {
+			color: $tip-color;
+			letter-spacing: 0.84px;
+			line-height: 40px;
+		}
+	}
+}
+.header_cancer-type{
+	font-size: 12px;
+	letter-spacing: 0.72px!important;
+	display: inline;
+	border-bottom: 1px solid;
+
+}

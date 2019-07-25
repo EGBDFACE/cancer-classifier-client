@@ -1,5 +1,4 @@
-@import './base.scss';
-
+@import '../../constant/variables.scss';
 
 .btn-upload {
 	display: inline-block;
@@ -24,7 +23,7 @@
 		display: inline-block;
 		margin-right: 14px;
 		vertical-align: text-bottom;
-		background: url('../css/img/upload.png');
+		background: url('../../assets/images/upload.png');
 		width: 23px;
 		height: 22px;
 		background-size: 23px 22px;
@@ -96,7 +95,7 @@
 										display: inline-block;
 										width: 26px;
 										height: 20px;
-										background: url('../css/img/vcf.png') center / 26px 20px;
+										background: url('../../assets/images/vcf.png') center / 26px 20px;
 									}
 								}
 								.file-size {
@@ -158,7 +157,7 @@
 											.icon-classifier {
 												vertical-align: middle;
 												display: inline-block;
-												background: url('../css/img/ourModel.png');
+												background: url('../../assets/images/ourModel.png');
 												width: 60px;
 												height: 60px;
 												background-size: 60px 60px;
@@ -230,7 +229,7 @@
 									.icon-run-model {
 										vertical-align: middle;
 										display: inline-block;
-										background: url('../css/img/runModel.png');
+										background: url('../../assets/images/runModel.png');
 										width: 23px;
 										height: 22px;
 										background-size: 23px 22px;
@@ -264,7 +263,7 @@
 	align-items: center;
 }
 .download-excel_icon{
-	background-image: url('./img/download.svg');
+	background-image: url('../../assets/images/download.svg');
 	background-repeat: no-repeat;
 	display: inline-block;
 	width: 25px;
@@ -282,7 +281,7 @@
 	position: relative;
 }
 .file-type_choose-icon{
-	background-image: url('./img/dropDownIcon.svg');
+	background-image: url('../../assets/images/dropDownIcon.svg');
 	background-repeat: no-repeat;
 	display: inline-block;
 	width: 12px;

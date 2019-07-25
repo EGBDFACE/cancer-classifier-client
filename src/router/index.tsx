@@ -1,30 +1,27 @@
 import * as React from 'react';
 import Loadable from 'react-loadable';
-import '@/css/base.scss';
-import Home from '../pages/Home';
-// import RunModel from '../pages/RunModel';
 // import { Route, Router } from 'react-router-dom';
-import { Route, BrowserRouter as Router} from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
+import LoadingMask from 'src/components/LoadingMask';
 import history from './history';
+import SignIn from 'src/pages/SignIn';
+import './style.scss';
 
-// const SignIn = Loadable({
-//     loader: () => import('../pages/SignIn'),
-//     loading: () =>  <div className='loadingPage'><div className='sk-rotating-plane'></div></div>
-// });
-// const SignUp = Loadable({
-//     loader: () => import('../pages/SignUp'),
-//     loading: () => <div className='loadingPage'><div className='sk-rotating-plane'></div></div>
-// });
+const Home = Loadable({
+    loader: () => import('src/pages/Home'),
+    loading: () => <LoadingMask />
+});
 const RunModel = Loadable({
-    loader: () => import('../pages/RunModel'),
-    loading: () => <div className='loadingPage'><div className='sk-rotating-plane'></div></div>
+    loader: () => import('src/pages/RunModel'),
+    loading: () => <LoadingMask />
 });
 
 export default (
     // <Router history={history}>
     <Router basename='/cancer-classifier'>
-        <div>
-            <Route exact path="/" component={Home}/>
+        <div className='router-content'>
+            <Route exact path="/" component={SignIn}/>
+            <Route path='/home' component={Home} />
             <Route path="/runModel" component={RunModel}/>
         </div>
     </Router>
