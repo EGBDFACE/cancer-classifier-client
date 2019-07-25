@@ -96,7 +96,7 @@ export default class SignIn extends React.Component <IProps, IStates> {
 
                 }else if(res.data.code === '000002'){
                     // no such user
-                    alert('no such user');
+                    alert('wrong username or password');
                     this.setState({
                         signInFlag: false
                     })
