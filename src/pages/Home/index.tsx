@@ -29,7 +29,7 @@ export default class Home extends React.Component<Props, States> {
 		// console.log(this.props)
 		return (
 		<div className="page">
-			<Header location={this.props.location}/>
+			{/* <Header location={this.props.location}/> */}
 			<div className="main">
 				<div className="title">
 					<h1>A Superior Cancer Classifier</h1>
