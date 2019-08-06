@@ -1,4 +1,4 @@
-@import '../../constant/variables.scss';
+@import 'src/constant/variables.scss';
 
 .btn-upload {
 	display: inline-block;
@@ -340,4 +340,25 @@
 }
 .result_score-number{
 	color: #444444;
+}
+.loading-icon {
+	display: inline-block;
+	height: 20px;
+	width: 20px;
+	background-image: url('../../assets/images/loading.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+@keyframes rotation{
+	from {-webkit-transform: rotate(0deg);}
+	to {-webkit-transform: rotate(360deg);}
+	}
+	
+.Rotation{
+	transform: rotate(360deg);
+	animation: rotation 1.5s linear infinite;
+	-moz-animation: rotation 1.5s linear infinite;
+	-webkit-animation: rotation 1.5s linear infinite;
+	-o-animation: rotation 1.5s linear infinite;
 }

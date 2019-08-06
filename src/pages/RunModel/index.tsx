@@ -3,7 +3,6 @@ import * as SparkMD5 from 'spark-md5';
 import {  CANCER_LABEL as cancerLabel } from 'src/constant';
 import './style.scss';
 import Header from 'src/components/Header';
-import LoadingLabel from 'src/components/LoadingLabel';
 import Footer from 'src/components/Footer'
 import { fetchGetResult, fetchUploadFile } from 'src/api';
 
@@ -65,12 +64,15 @@ export default class RunModel extends React.Component<Props, States> {
 		this.createExcelFileDown = this.createExcelFileDown.bind(this);
 	}
 	createExcelFileDown(){
-		let resultStr = 'Sample Name,Raw Label,Our Classifier\n';
+		let resultStr = 'Sample Name , Raw Label , Top 1 Inference , Top 2 Inference , Top 3 Inference \n';
 		const { fileList } = this.state;
 		for(let i=0; i<fileList.length; i++){
+			const score = fileList[i].score.split('\n');
 			resultStr += fileList[i].fileName + '\t,'
 					+fileList[i].label + '\t,'
-					+fileList[i].score + '\t,'
+					+score[0] + '\t,'
+					+score[1] + '\t,'
+					+score[2]
 					+'\n';
 			if(fileList[i].status !== 'RUN_SUCCESS'){
 				return;
@@ -421,15 +423,20 @@ export default class RunModel extends React.Component<Props, States> {
 			<div className="file-list-wrapper">
 				<table className="file-table">
 					<colgroup>
-						<col style={{ 'width': '70%' }} />
+						<col style={{ 'width': '40%' }} />
 						<col style={{ 'width': '15%' }} />
 						<col style={{ 'width': '15%' }} />
+						<col style={{ 'width': '15'  }} />
+						<col style={{ 'width': '15'  }} />
 					</colgroup>
 					<thead>
 						<tr>
 							<th>Sample Name</th>
 							<th>Raw Label</th>
-							<th>Our Classifier</th>
+							{/* <th>Our Classifier</th> */}
+							<th>Top 1 Inference</th>
+							<th>Top 2 Inference</th>
+							<th>Top 3 Inference</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -452,18 +459,28 @@ export default class RunModel extends React.Component<Props, States> {
 	// 		</tr>
 	// 	))
 	// }
-	renderResultList(v: FileItem, i: number){
+	renderResultListScoreItem ( score: any, index: number, label: string) {
+		if (score.length === 0) {
+			return null;
+		}
 		let wrongLabelStyle = undefined;
-		if((v.score.slice(0,v.score.indexOf('\t')) !== v.label)&&(v.label !== '')){
-			wrongLabelStyle = {
-				color: '#D0021B'
-			}
+		const scoreLabel: string = score.split(/\s+/)[0] || '';
+		const confidenceStr: string = score.split(/\s+/)[1] || '';
+		const scoreConfidence :number = (confidenceStr == '') ? 0 : +parseFloat(confidenceStr).toFixed(2)
+		if (scoreLabel !== label && label !== '') {
+			wrongLabelStyle = { color: '#D0021B' };
+		} 
+		if (label == '') {
+			wrongLabelStyle = { color: '#444444' };
 		}
-		if(v.label == ''){
-			wrongLabelStyle = {
-				color: '#444444'
-			}
-		}
+		return (
+			<td className="file-result_score" key={index}>
+				<span className="result_score-label" style={wrongLabelStyle}>{scoreLabel}</span>
+				<span className="result_score-number">{scoreConfidence}</span>
+			</td>
+		)
+	}
+	renderResultList(v: FileItem, i: number){
 		if(v.status === 'PREPARE_TO_RUN'){
 			return null
 		}else if(v.status === 'RUNNING'){
@@ -474,22 +491,24 @@ export default class RunModel extends React.Component<Props, States> {
 					<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
 					<td className="file-size">{v.label}</td>
 					<td>
-						<LoadingLabel index={i} />
+						<i className='loading-icon Rotation' />
+					</td>
+					<td>
+						<i className='loading-icon Rotation' />
+					</td>
+					<td>
+						<i className='loading-icon Rotation' />
 					</td>
 				</tr>
 			)
 		}else{
-			
 			return(
 				<tr
 					className="file-list"
 					key={i}>
 					<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
 					<td className="file-result_rawlabel">{v.label}</td>
-					<td className="file-result_score">
-						<span className="result_score-label" style={wrongLabelStyle}>{v.score.slice(0,v.score.indexOf('\t'))}</span>
-						<span className="result_score-number">{v.score.slice(v.score.indexOf('\t')+1)}</span>
-					</td>
+					{ v.score.split('\n').map(( value,index ) => this.renderResultListScoreItem(value, index, v.label))}
 				</tr>
 			)
 		}
