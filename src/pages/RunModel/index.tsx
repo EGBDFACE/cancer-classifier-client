@@ -463,8 +463,15 @@ export default class RunModel extends React.Component<Props, States> {
 		}
 		let wrongLabelStyle = undefined;
 		const scoreLabel: string = score.split(/\s+/)[0] || '';
-		const confidenceStr: string = score.split(/\s+/)[1] || '';
-		const scoreConfidence :number = (confidenceStr == '') ? 0 : +parseFloat(confidenceStr).toFixed(2)
+		let confidenceStr: string = score.split(/\s+/)[1] || '';
+		// const scoreConfidence :number = (confidenceStr == '') ? 0 : Math.floor(+parseFloat(confidenceStr)*10000)/10000;
+		if (confidenceStr != '') {
+			let str = '';
+			for (let i=0; i<6; i++) {
+				str += confidenceStr[i] ? confidenceStr[i] : '0';
+			}
+			confidenceStr = str;
+		}
 		if (scoreLabel !== label && label !== '') {
 			wrongLabelStyle = { color: '#D0021B' };
 		} 
@@ -474,7 +481,7 @@ export default class RunModel extends React.Component<Props, States> {
 		return (
 			<td className="file-result_score" key={index}>
 				<span className="result_score-label" style={wrongLabelStyle}>{scoreLabel}</span>
-				<span className="result_score-number">{scoreConfidence}</span>
+				<span className="result_score-number">{confidenceStr}</span>
 			</td>
 		)
 	}
