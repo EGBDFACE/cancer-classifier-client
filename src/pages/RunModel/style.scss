@@ -32,7 +32,8 @@
 
 .model-wrapper {
 	.main {
-		margin: 53px 200px 0;
+		margin: 0 200px;
+		padding: 0;
 		.process {
 			position: relative;
 			counter-reset: step;
@@ -43,7 +44,7 @@
 				width: 1px;
 				height: 100%;
 				background-color: $line-color;
-				z-index: -1;
+				// z-index: -1;
 			}
 			li {
 				.step-info {
@@ -252,6 +253,9 @@
 			}
 		}
 	}
+}
+.load-data, .run-classifier-wrapper {
+	position: relative;
 }
 .wrapper_download-excel{
 	cursor: pointer;
