@@ -423,11 +423,11 @@ export default class RunModel extends React.Component<Props, States> {
 			<div className="file-list-wrapper">
 				<table className="file-table">
 					<colgroup>
-						<col style={{ 'width': '40%' }} />
-						<col style={{ 'width': '15%' }} />
-						<col style={{ 'width': '15%' }} />
-						<col style={{ 'width': '15'  }} />
-						<col style={{ 'width': '15'  }} />
+						<col style={{ 'width': '20%' }} />
+						<col style={{ 'width': '20%' }} />
+						<col style={{ 'width': '20%' }} />
+						<col style={{ 'width': '20'  }} />
+						<col style={{ 'width': '20'  }} />
 					</colgroup>
 					<thead>
 						<tr>
@@ -467,13 +467,13 @@ export default class RunModel extends React.Component<Props, States> {
 		const scoreLabel: string = score.split(/\s+/)[0] || '';
 		let confidenceStr: string = score.split(/\s+/)[1] || '';
 		// const scoreConfidence :number = (confidenceStr == '') ? 0 : Math.floor(+parseFloat(confidenceStr)*10000)/10000;
-		if (confidenceStr != '') {
-			let str = '';
-			for (let i=0; i<6; i++) {
-				str += confidenceStr[i] ? confidenceStr[i] : '0';
-			}
-			confidenceStr = str;
-		}
+		// if (confidenceStr != '') {
+		// 	let str = '';
+		// 	for (let i=0; i<6; i++) {
+		// 		str += confidenceStr[i] ? confidenceStr[i] : '0';
+		// 	}
+		// 	confidenceStr = str;
+		// }
 		if (scoreLabel !== label && label !== '') {
 			wrongLabelStyle = { color: '#D0021B' };
 		} 
