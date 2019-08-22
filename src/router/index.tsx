@@ -23,6 +23,7 @@ export default (
             <Route exact path="/" component={SignIn}/>
             <Route path='/home' component={Home} />
             <Route path="/runModel" component={RunModel}/>
+            {/* <Route path='/' exact component={RunModel} /> */}
         </div>
     </Router>
 );
