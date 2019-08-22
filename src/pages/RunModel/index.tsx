@@ -6,6 +6,10 @@ import Header from 'src/components/Header';
 import Footer from 'src/components/Footer'
 import { fetchGetResult, fetchUploadFile } from 'src/api';
 
+interface FileItemScore {
+	label: string,
+	confidence: string
+}
 interface FileItem {
 	fileMD5: string
 	fileName: string
@@ -15,7 +19,7 @@ interface FileItem {
 	labelChooseFlag: boolean,
 	progress: number,
 	// score: number,
-	score: string,
+	score: Array<FileItemScore>,
 	status: string,
 	uploaded: boolean,
 	predicted: boolean,
@@ -35,7 +39,7 @@ interface Props {
 interface States {
 	applyAllFileItemFlag: boolean,
 	fileStatus: string,
-	fileObj: any,
+	// fileObj: any,
 	fileList: FileItem[],
 	showClassifier: boolean,
 	showResults: boolean
@@ -50,7 +54,7 @@ export default class RunModel extends React.Component<Props, States> {
 		this.state = {
 			applyAllFileItemFlag: false,
 			fileStatus: 'FILE_NOT_SELECTED',
-			fileObj: null,
+			// fileObj: null,
 			fileList: [],
 			showClassifier: false,
 			showResults: false
@@ -67,13 +71,14 @@ export default class RunModel extends React.Component<Props, States> {
 		let resultStr = 'Sample Name , Raw Label , Top 1 Inference , Top 2 Inference , Top 3 Inference \n';
 		const { fileList } = this.state;
 		for(let i=0; i<fileList.length; i++){
-			const score = fileList[i].score.split('\n');
+			// const score = fileList[i].score.split('\n');
 			resultStr += fileList[i].fileName + '\t,'
-					+fileList[i].label + '\t,'
-					+score[0] + '\t,'
-					+score[1] + '\t,'
-					+score[2]
-					+'\n';
+					+fileList[i].label + '\t,';
+			for (let j=0; j<fileList[i].score.length; j++){
+				resultStr += fileList[i].score[j].label + '\t' 
+					+fileList[i].score[j].confidence + '\t,';
+			}
+			resultStr += '\n';
 			if(fileList[i].status !== 'RUN_SUCCESS'){
 				return;
 			}
@@ -146,7 +151,7 @@ export default class RunModel extends React.Component<Props, States> {
 				progress: 0,
 				label: '',
 				labelChooseFlag: false,
-				score: '',
+				score: [],
 				status: 'PREPARE_TO_RUN',
 				uploaded: false,
 				predicted: false,
@@ -156,7 +161,7 @@ export default class RunModel extends React.Component<Props, States> {
 		}
 		this.setState({
 			fileStatus: 'FILE_UPLOADING',
-			fileObj: value,
+			// fileObj: value,
 			fileList: JSON.parse(JSON.stringify(fileList))
 		}, () => {
 				// 上传未上传的文件
@@ -209,7 +214,27 @@ export default class RunModel extends React.Component<Props, States> {
                 .then((res: any) => {
 					if(res.data.code === '000002'){
 						location.pathname = '/';
-					}else {
+					}else if (res.data.code === '000000') {
+						alert('暂不支持此类文件');
+						let fileList = this.state.fileList;
+						for (let i=0; i<fileList.length; i++) {
+							if (fileList[i].fileMD5 == fileMD5) {
+								fileList.splice(i,1);
+								break;
+							}
+						}
+						this.setState({
+							fileList: fileList,
+							// fileObj: fileList
+						});
+						if (fileList.length == 0) {
+							this.setState ({
+								// fileObj: null,
+								fileStatus: 'FILE_NOT_SELECTED',
+								showClassifier: false
+							});
+						}
+					} else if (res.data.code === '000001') {
 						// 上传成功
 						this.updateFileList(function(fileItem: FileItem) {
 							if (fileItem.id == value.id) {
@@ -220,6 +245,7 @@ export default class RunModel extends React.Component<Props, States> {
 						resolve(res)
 					}
 				}).catch( (err: any) => {
+					alert('出错啦！');
 					reject(err)
 				})
 			}
@@ -264,7 +290,13 @@ export default class RunModel extends React.Component<Props, States> {
 					// 模型运行成功
 					this.updateFileList(function (fileItem: FileItem) {
 						if (fileItem.fileMD5 == value.fileMD5) {
-							fileItem.score = res.data
+							for (let key in res.data.data) {
+								const obj = {
+									label: key,
+									confidence: res.data.data[key]
+								};
+								fileItem.score.push(obj);
+							}
 							fileItem.status = 'RUN_SUCCESS';
 							fileItem.predicted = true
 						}
@@ -445,33 +477,14 @@ export default class RunModel extends React.Component<Props, States> {
 			</div>
 		)
 	}
-
-	// renderResultList(fileList: FileItem[]) {
-	// 	return fileList.map((v, i) => (
-	// 		<tr
-	// 			className="file-list"
-	// 			key={i}>
-	// 			<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
-	// 			<td className="file-size">{v.label}</td>
-	// 			<td>{v.score}</td>
-	// 		</tr>
-	// 	))
-	// }
-	renderResultListScoreItem ( score: any, index: number, label: string) {
-		if (score.length === 0) {
+	
+	renderResultListScoreItem ( score: FileItemScore , index: number, label: string) {
+		if (Object.keys(score).length === 0) {
 			return null;
 		}
 		let wrongLabelStyle = undefined;
-		const scoreLabel: string = score.split(/\s+/)[0] || '';
-		let confidenceStr: string = score.split(/\s+/)[1] || '';
-		// const scoreConfidence :number = (confidenceStr == '') ? 0 : Math.floor(+parseFloat(confidenceStr)*10000)/10000;
-		// if (confidenceStr != '') {
-		// 	let str = '';
-		// 	for (let i=0; i<6; i++) {
-		// 		str += confidenceStr[i] ? confidenceStr[i] : '0';
-		// 	}
-		// 	confidenceStr = str;
-		// }
+		const scoreLabel = score.label;
+		const confidenceStr = score.confidence;
 		if (scoreLabel !== label && label !== '') {
 			wrongLabelStyle = { color: '#D0021B' };
 		} 
@@ -513,7 +526,7 @@ export default class RunModel extends React.Component<Props, States> {
 					key={i}>
 					<td className="file-name"><i className="icon-vcf"></i>{v.fileName}</td>
 					<td className="file-result_rawlabel">{v.label}</td>
-					{ v.score.split('\n').map(( value,index ) => this.renderResultListScoreItem(value, index, v.label))}
+					{ v.score.map(( value,index ) => this.renderResultListScoreItem(value, index, v.label))}
 				</tr>
 			)
 		}
