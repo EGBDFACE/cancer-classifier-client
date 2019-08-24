@@ -246,7 +246,23 @@ export default class RunModel extends React.Component<Props, States> {
 						resolve(res)
 					}
 				}).catch( (err: any) => {
-					alert('出错啦！');
+					alert('文件处理出错啦！');
+					let fileList = this.state.fileList;
+					for (let i=0; i<fileList.length; i++) {
+						if (fileList[i].fileMD5 == fileMD5) {
+							fileList.splice(i,1);
+							break;
+						}
+					}
+					this.setState({
+						fileList: fileList
+					});
+					if (fileList.length == 0) {
+						this.setState ({
+							fileStatus: 'FILE_NOT_SELECTED',
+							showClassifier: false
+						});
+					}
 					reject(err)
 				})
 			}
