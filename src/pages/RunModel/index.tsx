@@ -302,7 +302,9 @@ export default class RunModel extends React.Component<Props, States> {
             .then( (res: any) => {
 				if(res.data.code === '000002'){
 					location.pathname='/';
-				}else{
+				}else if (res.data.code === '000003') {
+					alert('文件正在处理中，请稍候');
+				}else if (res.data.code === '000001'){
 					// 模型运行成功
 					this.updateFileList(function (fileItem: FileItem) {
 						if (fileItem.fileMD5 == value.fileMD5) {
