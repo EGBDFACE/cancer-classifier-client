@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import * as React from 'react';
 import * as SparkMD5 from 'spark-md5';
 import {  CANCER_LABEL as cancerLabel } from 'src/constant';
@@ -83,13 +84,16 @@ export default class RunModel extends React.Component<Props, States> {
 				return;
 			}
 		}
-		let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(resultStr);
-		let link = document.createElement('a');
-		link.href = uri;
-		link.download = 'result.csv';
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
+		const fileName = 'result.csv';
+		const blobObj = new Blob([resultStr],{type: "text/plain;charset=utf-8"});
+		saveAs(blobObj,fileName);
+		// let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(resultStr);
+		// let link = document.createElement('a');
+		// link.href = uri;
+		// link.download = 'result.csv';
+		// document.body.appendChild(link);
+		// link.click();
+		// document.body.removeChild(link);
 	}
 
 	handleApplyAllFileItemFlagChange = (itemIndex: number) => (e:any) => {
