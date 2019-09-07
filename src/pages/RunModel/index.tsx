@@ -296,7 +296,7 @@ export default class RunModel extends React.Component<Props, States> {
 	}
 
 	runModelFile(value: FileItem) {
-		// const { fileList } = this.state;
+		const { fileList } = this.state;
 		return new Promise((resolve, reject) => {
             const data = {
                 fileName: value.fileName,
@@ -308,6 +308,15 @@ export default class RunModel extends React.Component<Props, States> {
 					location.pathname='/';
 				}else if (res.data.code === '000003') {
 					alert('文件正在处理中，请稍候');
+					let newList = fileList;
+					for (let i=0; i<newList.length; i++) {
+						if (newList[i].status == 'RUNNING') {
+							newList[i].status = 'PREPARE_TO_RUN';
+						}
+					}
+					this.setState({
+						fileList: newList
+					});
 				}else if (res.data.code === '000001'){
 					// 模型运行成功
 					this.updateFileList(function (fileItem: FileItem) {
