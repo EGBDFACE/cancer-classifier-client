@@ -1,0 +1,51 @@
+@import 'src/styles/global.scss';
+
+body,html{
+    padding: 0;
+	margin: 0;
+	font-size: $font-size-s;
+	color: $font-color;
+	background-color: $bg-color;
+	font-family: $font-family;
+    height: 100%;
+    width: 100%;
+    // overflow: hidden;
+    overflow: auto;
+}
+
+h1,
+h2,
+h3,
+p {
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	font-size: $font-size-xl;
+	line-height: 40px;
+	letter-spacing: 2.4px;
+	font-weight: $font-semibold;
+}
+
+h2 {
+	font-size: $font-size-l;
+	font-weight: $font-semibold;
+	letter-spacing: 1.92px;
+	line-height: 40px;
+}
+
+#root {
+    height: 100%;
+    width: 100%;
+}

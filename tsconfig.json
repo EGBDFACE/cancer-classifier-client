@@ -13,9 +13,15 @@
         "moduleResolution": "node",
         "baseUrl": ".",
         "paths": {
-            "Constant": [
-                "src/constant/*"
+            // "Constant": [
+            //     "../src/constant/*"
+            // ],
+            "src/*": [
+                "src/*"
             ]
+            // "LoadingMask": [
+            //     "src/components/shared/Mask/LoadingMask"
+            // ]
         }
     },
     "include": [

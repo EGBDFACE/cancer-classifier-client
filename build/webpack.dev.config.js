@@ -1,11 +1,11 @@
 const webpack = require('webpack');
-const path = require('path');
+// const path = require('path');
 // const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 //     template:'!!ejs-loader!./template.html',
 // //     filename:'dist/index.html'
 // });
 const merge = require('webpack-merge');
-const commonConfig = require('./webpack.common.config');
+const commonConfig = require('./webpack.base.config.js');
 
 // commonConfig.devServer = {
 //     // contentBase: path.join(__dirname,'./dist'),
@@ -19,6 +19,7 @@ const commonConfig = require('./webpack.common.config');
 // config.plugins.push(new HtmlWebpackPlugin());
 module.exports = merge(commonConfig,{
     //entry: './src/index.tsx',
+    mode: 'development',
     devServer:{
         hot: true,
         historyApiFallback: true

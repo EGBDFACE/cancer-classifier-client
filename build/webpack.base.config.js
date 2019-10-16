@@ -3,10 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
-    entry: './src/index.tsx',
+    entry: '../src/index.tsx',
     output:{
-        path : path.resolve(__dirname,'./dist'),
+        path : path.resolve(__dirname,'../dist'),
         filename: '[name].bundle.js',
         chunkFilename: '[name].bundle.js',
         // library: 'my-library',
@@ -19,7 +18,10 @@ module.exports = {
     resolve:{
         extensions:['.ts','.tsx','.js','.json'],
         alias: {
-            '@': path.resolve(__dirname,'src/')
+            '@': path.resolve(__dirname,'src/'),
+            'src': path.resolve(__dirname,'src/'),
+            // 'src': '../src',
+            // 'LoadingMask': '../src/components/shared/Mask/LoadingMask',
         },
         plugins: [new TsconfigPathsPlugin()]
     },
