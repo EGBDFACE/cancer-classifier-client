@@ -6,7 +6,62 @@ $prefix: 'Welcome';
     height: 120px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-weight: 500;
     color: white;
-    transition: background-color .4s,color .4s,transform .4s,opacity .4s ease-in-out;
+    border-bottom: none;
+    transition: background-color .4s,color .4s,transform .4s,opacity .4s ease-in-out, height .4s, border-bottom .4s;
+    -webkit-transition: background-color .4s,color .4s,transform .4s,opacity .4s ease-in-out, height .4s, border-bottom .4s;
+    -moz-transition: background-color .4s,color .4s,transform .4s,opacity .4s ease-in-out, height .4s, border-bottom .4s;
+}
+.#{$prefix}_main_header-scroll {
+    @extend .#{$prefix}_main_header;
+    background-color: white;
+    color: black;
+    height: 80px;
+    border-bottom: 1px solid #FF6B58;
+    z-index: 1;
+}
+
+.#{$prefix}_main_header__icon{
+    margin-left: 100px;
+}
+.#{$prefix}_main_header__menu{
+    margin-right: 100px;   
+}
+.#{$prefix}_main_header__menu_run{
+    display: inline-block;
+    margin: 0 20px;
+    height: 56px;
+    line-height: 56px;
+    cursor: pointer;
+    font-weight: 400;
+    letter-spacing: 1px;
+    &:hover{
+        opacity: .8;
+    }
+}
+.#{$prefix}_main_header__menu_login{
+    @extend .#{$prefix}_main_header__menu_run;
+    font-weight: 600;
+}
+.#{$prefix}_main_header__menu_run-scroll{
+    @extend .#{$prefix}_main_header__menu_run;
+    transition: opacity .4s;
+    -webkit-transition: opacity .4s;
+    -moz-transition: opacity .4s;
+    button{
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        background-color: #262930;
+        padding: 0 30px;
+        color: #FCFCFC;
+        outline: none;
+        cursor: pointer;
+    }
+}
+.#{$prefix}_main_header__menu_login-scroll{
+    @extend .#{$prefix}_main_header__menu_login;
+    color: #5e6573;
 }

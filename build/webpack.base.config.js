@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-    entry: '../src/index.tsx',
+    entry: './src/index.tsx',
     output:{
         path : path.resolve(__dirname,'../dist'),
         filename: '[name].bundle.js',
@@ -80,7 +80,7 @@ module.exports = {
     // },
     plugins:[
         new HtmlWebpackPlugin({
-            template: '!!ejs-loader!./index.html'
+            template: '!!ejs-loader!./build/index.html'
         })
     ],
     // node:{

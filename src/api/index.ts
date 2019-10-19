@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL as baseUrl } from 'src/constant';
+import { BASE_URL as baseUrl } from 'src/utils/constant';
 
 axios.interceptors.request.use (config => {
     const token = localStorage.getItem('token');
@@ -47,5 +47,6 @@ export function fetchGetSalt(data: any){
         baseURL: baseUrl,
         url: 'getSalt',
         data: data,
+        timeout: 1000
     })
 }
