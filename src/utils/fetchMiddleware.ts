@@ -1,6 +1,7 @@
 function isPromise (val:any) {
     return val && typeof val.then === 'function';
 }
+// action 为网络请求时，处理的中间件
 const fetchMiddleware = (store:any) => (next:any) => (action:any) => {
     if (!isPromise(action.func) || !Array.isArray(action.types)) {
         return next(action);

@@ -5,13 +5,15 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import routes from 'src/routes';
 import configureStore from 'src/redux/configureStore';
 import 'src/index.scss';
+import DevTools from 'src/redux/devTools';
 
 let createHistory = require('history').createBrowserHistory;
-const store = configureStore(undefined);
+const store = configureStore();
 const _history = syncHistoryWithStore(createHistory(), store);
 
 ReactDOM.render((
     <Provider store={store}>
         {routes(_history)}
+        <DevTools />
     </Provider>
 ), document.getElementById('root'))

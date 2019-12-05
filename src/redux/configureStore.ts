@@ -1,21 +1,16 @@
-import { applyMiddleware, createStore, combineReducers, compose, } from 'redux';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
-import ThunkMiddleware from 'redux-thunk';
-import fetchMiddleware from 'src/utils/fetchMiddleware';
-import rootReducer from './reducer';
+// use definePlugin(webpack) to use devtools only in dev
+import { configureStore as configureStoreDev } from 'src/redux/configureStore.dev';
+import { configureStore as configureStoreProd } from 'src/redux/configureStore.prod';
 
-let createHistory = require('history').createBrowserHistory;
-
-const finalCreateStore = compose(
-    applyMiddleware(ThunkMiddleware, fetchMiddleware, routerMiddleware(createHistory()))
-)(createStore);
-
-const reducer = combineReducers(Object.assign({}, rootReducer, {
-    routing: routerReducer,
-}));
-
-export default function configureStore (initialState: any) {
-    const store = finalCreateStore( reducer, initialState);
-
-    return store;
+let configureStore:any = undefined;
+if (process.env.NODE_ENV === 'production') {
+    configureStore = configureStoreProd;
+    // module.exports = require('./configureStore.prod');
+} else if (process.env.NODE_ENV === 'development') {
+    configureStore = configureStoreDev;
+    // module.exports = require('./configureStore.dev');
+} else {
+    console.error('error in require configureStore');
 }
+
+export default configureStore;

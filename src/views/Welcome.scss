@@ -5,6 +5,7 @@ $prefix: 'Welcome';
     width: 100%;
     // background-color: rgba(0,0,0,0) !important;
     color: white;
+    overflow: scroll;
 }
 .#{$prefix}_main{
     padding-top: 40vh;

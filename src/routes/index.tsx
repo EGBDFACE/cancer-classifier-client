@@ -3,6 +3,8 @@ import Loadable from 'react-loadable';
 import { Route, Router, Switch } from 'react-router-dom';
 import LoadingMask from 'src/components/shared/Mask/LoadingMask';
 
+// import Welcome from 'src/views/Welcome';
+// import RunModel from 'src/views/RunModel';
 const Welcome = Loadable({
     loader: () => import('src/views/Welcome.tsx'),
     loading: () => <LoadingMask />
