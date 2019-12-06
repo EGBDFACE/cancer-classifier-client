@@ -8,7 +8,7 @@ import 'src/index.scss';
 import DevTools from 'src/redux/devTools';
 
 let createHistory = require('history').createBrowserHistory;
-const store = configureStore();
+export const store = configureStore();
 const _history = syncHistoryWithStore(createHistory(), store);
 
 ReactDOM.render((

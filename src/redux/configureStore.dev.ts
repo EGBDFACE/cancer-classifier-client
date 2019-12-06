@@ -48,6 +48,13 @@ const reducer = combineReducers(Object.assign({}, rootReducer, {
 }));
 
 export function configureStore (initialState: any) {
+    /**
+     * 阅读 applyMiddleWare 和 compose 可以发现返回的 store 
+     * 中的 dispatch 被改写为 各个 middleWare 传入 {getStore, dispatch}
+     * 之后的链式结构（middleWare 传入 {getStore, dispatch} 返回一个匿名函数 ），
+     * 该匿名函数的参数是 next ，各个 middleWare 中的 next 指的是其包裹的内层 middleware 链
+     * 调用 next 返回的是一个参数为 action 的函数，这个函数即在此 middleware 中对 action 进行处理
+     *  */ 
     const store = finalCreateStore( reducer, initialState);
 
     // module.hot error 

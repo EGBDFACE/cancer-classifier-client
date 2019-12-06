@@ -1,5 +1,6 @@
 import { fetchGetSalt, fetchLogin } from 'src/api';
 import { hmacTime } from 'src/utils/hmacTime';
+import { store } from 'src/index';
 
 export interface ILoginState {
     isLogined: boolean,
@@ -20,12 +21,18 @@ const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_ERROR = 'LOGIN_ERROR';
 const LOGIN_WRONG = 'LOGIN_WRONG';
 
-interface IUserInfo {
+export interface IUserInfo {
     username: string,
     password: string
 }
 
+// 属于一个 promise action 而不是 函数 action
 export async function login (params: IUserInfo) {
+    
+    store.dispatch({
+        type: LOGIN,
+    });
+
     const getSaltParams = {username: params.username};
     let getSaltResult = undefined;
     try{
@@ -43,26 +50,6 @@ export async function login (params: IUserInfo) {
             types: [LOGIN, LOGIN_SUCCESS, LOGIN_WRONG, LOGIN_ERROR],
             func: fetchLogin(loginParams),
         }
-        // try {
-        //     loginResult = await fetchLogin(loginParams);
-        // } catch (err) {
-        //     return {
-        //         type: LOGIN_ERROR,
-        //         err,
-        //     }
-        // }
-        // if (loginResult.data.code === '000001') {
-        //     localStorage.setItem('token', loginResult.data.data);
-        //     localStorage.setItem('token_exp', new Date().getTime().toString());
-        //     return {
-        //         type: LOGIN_SUCCESS,
-        //     }
-        // } else {
-        //     return {
-        //         type: LOGIN_ERROR,
-        //         err: 'wrong username or password'
-        //     }
-        // }
     } else {
         return {
             type: LOGIN_WRONG,
@@ -79,6 +66,7 @@ export default function loginState (state = initialState, action:any) {
                 isLogined: false,
                 isLoginError: false,
                 isLogining: true,
+                isLoginWrong: false
             };
         }
         case LOGIN_SUCCESS: {

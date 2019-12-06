@@ -3,16 +3,20 @@ import { connect } from 'react-redux';
 import './Login.scss';
 import { IStoreState } from 'src/redux/reducer';
 import * as welcomeReducer from 'src/views/WelcomeRedux';
+import * as loginReducer from 'src/components/Welcome/LoginRedux';
 
 interface IProps {
     isDisplay: boolean;
+    isLogining: boolean;
+    isLoginWrong: boolean;
     loginDialog?: (value: boolean) => void;
+    loginSubmit?: (params: loginReducer.IUserInfo) => void;
 }
-interface IStates {
-    username: string;
-    password: string;
-    isInputWrong: boolean;
-    inputWrongTip: string;
+interface IStates extends loginReducer.IUserInfo{
+    isShowWrongTip: boolean;
+    inputWrongTipTitle: string;
+    // isInputWrong: boolean;
+    // inputWrongTip: string;
 }
 
 class Login extends Component<IProps, IStates> {
@@ -21,8 +25,10 @@ class Login extends Component<IProps, IStates> {
         this.state = {
             username: '',
             password: '',
-            isInputWrong: false,
-            inputWrongTip: '',
+            isShowWrongTip: false,
+            inputWrongTipTitle: '',
+            // isInputWrong: false,
+            // inputWrongTip: '',
         };
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleUserNameChange = this.handleUserNameChange.bind(this);
@@ -32,11 +38,15 @@ class Login extends Component<IProps, IStates> {
 
     handleUserNameChange(e: any) {
         this.setState({
+            // isInputWrong: false,
+            isShowWrongTip: false,
             username: e.target.value
         });
     }
     handlePasswordChange(e: any) {
         this.setState({
+            // isInputWrong: false,
+            isShowWrongTip: false,
             password: e.target.value
         });
     }
@@ -44,25 +54,42 @@ class Login extends Component<IProps, IStates> {
         const { username, password } = this.state;
         if (username === '' || password === '') {
             this.setState({
-                isInputWrong: true,
-                inputWrongTip: 'Please enter both your email and password.'
+                isShowWrongTip: true,
+                // isInputWrong: true,
+                inputWrongTipTitle: 'Please enter both your email and password.'
             });
         } else {
             this.setState({
-                isInputWrong: false
+                // isInputWrong: false
+                isShowWrongTip: false,
             });
+            const params: loginReducer.IUserInfo = {
+                username,
+                password
+            };
+            this.props.loginSubmit(params);
         }
     }
     handleCloseDialog () {
         this.props.loginDialog(false);
     }
 
+    UNSAFE_componentWillReceiveProps(newProps: IProps) {
+        const prevProps = this.props;
+        if (newProps.isLoginWrong !== prevProps.isLoginWrong) {
+            console.log(newProps.isLoginWrong);
+            this.setState({
+                isShowWrongTip: newProps.isLoginWrong,
+                inputWrongTipTitle: newProps.isLoginWrong ? 'wrong username or password' : this.state.inputWrongTipTitle
+            })
+        }
+    }
+
     render() {
-        const { isDisplay } = this.props;
-        const { username, password, isInputWrong, inputWrongTip } = this.state;
+        const { isDisplay, isLogining, isLoginWrong } = this.props;
+        const { username, password, isShowWrongTip, inputWrongTipTitle } = this.state;
         const titleParams = 'Log in to Cancer Classifier';
         const isRendering =  !isDisplay ? { display: 'none'} : null;
-        const isShowWrongTip = !isInputWrong ? {display: 'none'} : null;
         const isUserNameInputing = username!=='';
         const isPasswordInputing = password!=='';
         return (
@@ -109,8 +136,8 @@ class Login extends Component<IProps, IStates> {
                             onChange = {this.handlePasswordChange}
                             />
                         <div className='login_dialog__body_wrong_tip'
-                            style={isShowWrongTip}
-                            >{inputWrongTip}</div>
+                            style={!isShowWrongTip ? {display: 'none'} : null}
+                            >{inputWrongTipTitle}</div>
                         <button className='login_dialog__body_submit'
                             onClick={this.handleSubmit}
                             >LOG IN</button>
@@ -127,12 +154,17 @@ class Login extends Component<IProps, IStates> {
 
 function mapStateToProps (state: IStoreState) {
     return {
-        isDisplay: state.welcome.displayState.isLoginDialog
+        isDisplay: state.welcome.displayState.isLoginDialog,
+        isLogining: state.welcome.login.isLogining,
+        isLoginWrong: state.welcome.login.isLoginWrong
     }
 }
 function mapDispatchToProps (dispatch: Dispatch<any>) {
     return {
-        loginDialog: (value: boolean) => dispatch(welcomeReducer.actionCreator(welcomeReducer.LOGIN_DIALOG, value))
+        loginDialog: (value: boolean) => dispatch(welcomeReducer.actionCreator(welcomeReducer.LOGIN_DIALOG, value)),
+        // 为什么这里 loginReducer.login(value) 会是一个 promise
+        // 因为 login 是一个 async 函数 ，async 函数的返回值就是一个 promise
+        loginSubmit: (value: loginReducer.IUserInfo) => dispatch(loginReducer.login(value))
     }
 }
 
