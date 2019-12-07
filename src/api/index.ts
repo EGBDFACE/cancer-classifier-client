@@ -47,6 +47,6 @@ export function fetchGetSalt(data: any){
         baseURL: baseUrl,
         url: 'getSalt',
         data: data,
-        timeout: 1000
+        // timeout: 1000
     })
 }

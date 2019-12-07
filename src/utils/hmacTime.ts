@@ -14,11 +14,12 @@ const jsSHA = require('jssha');
  */
 export function hmacTime(password:string, salt: string) {
     const nowTime: string = Math.floor(new Date().getTime()/60000).toString();
-    const passwordWithSalt: string = bcrypt.hasSync(password,salt);
+    const passwordWithSalt: string = bcrypt.hashSync(password,salt);
 
     const shaObj = new jsSHA('SHA-512', 'TEXT');
     shaObj.update(passwordWithSalt);
     shaObj.update(nowTime);
 
     const passwordWithSaltTime: string = shaObj.getHash('HEX');
+    return passwordWithSaltTime;
 }

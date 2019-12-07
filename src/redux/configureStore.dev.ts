@@ -4,6 +4,7 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import ThunkMiddleware from 'redux-thunk';
 import { persistState } from 'redux-devtools';
 import fetchMiddleware from 'src/utils/fetchMiddleware'; 
+import sequenceMiddleware from 'src/utils/sequenceMiddleware';
 import DevTools from 'src/redux/devTools';
 import rootReducer from 'src/redux/reducer';   
 
@@ -34,7 +35,7 @@ function getDebugSessionKey () {
  * 的调用
  */
 const finalCreateStore = compose(
-    applyMiddleware( ThunkMiddleware, fetchMiddleware, routerMiddleware(createHistory())),
+    applyMiddleware( ThunkMiddleware, fetchMiddleware, sequenceMiddleware, routerMiddleware(createHistory())),
     // Required! Enable Redux DevTools with the monitors you chose
     DevTools.instrument(),
     // Optional. Lets you write ?debug_session=<key> in address bar to persist debug sessions
