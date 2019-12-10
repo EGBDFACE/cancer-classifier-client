@@ -101,6 +101,7 @@ async function loginWithSalt (params: IUserInfo, salt: string) {
 //         password: hmacTime(params.password, )
 //     }
 // }
+
 export async function login (params: IUserInfo) {
     const startLogin = new Promise( (resolve, reject) => {
         resolve({
@@ -130,8 +131,12 @@ export async function login (params: IUserInfo) {
         startLogin,
         // (dispatch: any, getState: any) => { dispatch({ type: GET_SALT_ING }) },
         getSaltPro,
-        (dispatch: any, getState: any) => {
-            dispatch(loginWithSalt(params, getState().welcome.login.salt))
+        (dispatch: any, getState: any): any => {
+            if (getState().welcome.login.salt === '') {
+                return null;
+            }else {
+                dispatch(loginWithSalt(params, getState().welcome.login.salt));
+            }
         }
     ]
 }

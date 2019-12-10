@@ -19,7 +19,7 @@ const sequenceMiddleware = ({dispatch, getState} : any) => (next : any) => (acti
      * 
      * 这里如果中间有多种 action 被 dispatch ，是一个接一个的链式触发
      */
-    console.log(action);
+    // console.log(action);
     return action.reduce( (result, currAction) => {
         return result.then( () => {
             // console.log('1');

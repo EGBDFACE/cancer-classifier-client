@@ -1,13 +1,17 @@
 import React, { Component, Dispatch } from 'react';
 import { connect } from 'react-redux';
+// import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import Footer from 'src/layouts/Footer';
 import Login from 'src/components/Welcome/Login';
 import Nav from 'src/components/Welcome/Nav';
 import { IStoreState } from 'src/redux/reducer';
 import * as welcomeReducer from 'src/views/WelcomeRedux';
 import './Welcome.scss';
+// import { _history } from 'src/index';
 
 interface IProps {
+    goto: (value: string) => void,
     isLogin: boolean;
     // isLoginDialog: boolean,
     isScrollTop: boolean,
@@ -92,6 +96,16 @@ class Welcome extends Component<IProps,IStates> {
         }
     }
 
+    UNSAFE_componentWillReceiveProps(newProps: IProps) {
+        console.log(newProps.isLogin);
+        console.log(this.props.isLogin);
+        if(newProps.isLogin && !this.props.isLogin) {
+            // console.log('before',_history);
+            this.props.goto('/model');
+            // console.log('after',_history);
+        }
+    }
+
     render() {
         const NavProps = {
             // isLogin: false,
@@ -142,6 +156,7 @@ function mapStateToProps ( state: IStoreState ) {
 
 function mapDispatchToProps (dispatch: Dispatch<any> ) {
     return {
+        goto: (value: string) => dispatch(push(value)),
         loginDialog: (value: boolean) => dispatch(welcomeReducer.actionCreator(welcomeReducer.LOGIN_DIALOG, value)),
         welcomeScroll: (value: boolean) => dispatch(welcomeReducer.actionCreator(welcomeReducer.WELCOME_SCROLL, value))
     }

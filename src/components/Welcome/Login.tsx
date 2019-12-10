@@ -1,5 +1,6 @@
 import React, { Component, Dispatch } from 'react';
 import { connect } from 'react-redux';
+// import { push } from 'react-router-redux';
 import './Login.scss';
 import { IStoreState } from 'src/redux/reducer';
 import * as welcomeReducer from 'src/views/WelcomeRedux';
@@ -77,7 +78,7 @@ class Login extends Component<IProps, IStates> {
     UNSAFE_componentWillReceiveProps(newProps: IProps) {
         const prevProps = this.props;
         if (newProps.isLoginWrong !== prevProps.isLoginWrong) {
-            console.log(newProps.isLoginWrong);
+            // console.log(newProps.isLoginWrong);
             this.setState({
                 isShowWrongTip: newProps.isLoginWrong,
                 inputWrongTipTitle: newProps.isLoginWrong ? 'wrong username or password' : this.state.inputWrongTipTitle
@@ -161,10 +162,11 @@ function mapStateToProps (state: IStoreState) {
 }
 function mapDispatchToProps (dispatch: Dispatch<any>) {
     return {
+        // goto: (value: string) => dispatch(push(value)),
         loginDialog: (value: boolean) => dispatch(welcomeReducer.actionCreator(welcomeReducer.LOGIN_DIALOG, value)),
         // 为什么这里 loginReducer.login(value) 会是一个 promise
         // 因为 login 是一个 async 函数 ，async 函数的返回值就是一个 promise
-        loginSubmit: (value: loginReducer.IUserInfo) => dispatch(loginReducer.login(value))
+        loginSubmit: (value: loginReducer.IUserInfo) => dispatch(loginReducer.login(value)),
     }
 }
 

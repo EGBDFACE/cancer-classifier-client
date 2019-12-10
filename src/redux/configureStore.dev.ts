@@ -1,14 +1,17 @@
 // 生成 Redux store
 import { applyMiddleware, createStore, combineReducers, compose, } from 'redux';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+// react-router-redux 只兼容 react-route 2.x and 3.x
+// import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import ThunkMiddleware from 'redux-thunk';
 import { persistState } from 'redux-devtools';
 import fetchMiddleware from 'src/utils/fetchMiddleware'; 
 import sequenceMiddleware from 'src/utils/sequenceMiddleware';
 import DevTools from 'src/redux/devTools';
 import rootReducer from 'src/redux/reducer';   
+import browserHistory from 'src/routes/history';
 
-let createHistory = require('history').createBrowserHistory;
+// let createBrowserHistory = require('history').createBrowserHistory;
 
 function getDebugSessionKey () {
     // You can write custom logic here!
@@ -35,17 +38,18 @@ function getDebugSessionKey () {
  * 的调用
  */
 const finalCreateStore = compose(
-    applyMiddleware( ThunkMiddleware, fetchMiddleware, sequenceMiddleware, routerMiddleware(createHistory())),
+    applyMiddleware( ThunkMiddleware, fetchMiddleware, sequenceMiddleware, routerMiddleware(browserHistory)),
     // Required! Enable Redux DevTools with the monitors you chose
     DevTools.instrument(),
     // Optional. Lets you write ?debug_session=<key> in address bar to persist debug sessions
     persistState(getDebugSessionKey())
 )(createStore);
 
+const routerReducer = connectRouter(browserHistory);
 // rootReducer 中已经汇总整个应用的 reducer，
 // routerReducer 帮助实现路由状态和 Redux store 的统一
 const reducer = combineReducers(Object.assign({}, rootReducer, {
-    routing: routerReducer,
+    router: routerReducer,
 }));
 
 export function configureStore (initialState: any) {
