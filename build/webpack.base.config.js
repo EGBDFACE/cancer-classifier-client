@@ -47,7 +47,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(png|jpg|gif|svg)$/,
+                test: /\.(png|jpg|gif)$/,
                 use: [{
                     loader: 'url-loader',
                     options: {
@@ -55,6 +55,12 @@ module.exports = {
                     }
                 }]
             // }
+            },
+            {
+                test:/\.svg$/,
+                use: [{
+                    loader: '@svgr/webpack',
+                }],
             },
             {
                 test:/\.(txt)$/,

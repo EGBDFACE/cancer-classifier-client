@@ -1,3 +1,4 @@
+@import 'src/styles/global.scss';
 $prefix: 'Welcome';
 
 .#{$prefix}_main_header{
@@ -41,6 +42,7 @@ $prefix: 'Welcome';
         opacity: .8;
     }
     button{
+        border-radius: $box-border-radius;
         display: inline-block;
         width: 100%;
         height: 46px;

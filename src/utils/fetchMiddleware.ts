@@ -88,6 +88,9 @@ const fetchMiddleware = (store: any) => (next: any) => (action: any) => {
                 type: SUCCESS,
                 payload: result.data.data
             })
+            if (action.payload) {
+                next(action.payload);
+            }
         } else {
             next({
                 type: WRONG,

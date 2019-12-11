@@ -27,6 +27,7 @@
     ]
   },
   "devDependencies": {
+    "@svgr/webpack": "^4.3.3",
     "@types/bcrypt": "^3.0.0",
     "@types/classnames": "^2.2.7",
     "@types/d3": "^4.13.0",

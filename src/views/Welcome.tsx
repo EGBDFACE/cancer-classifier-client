@@ -96,15 +96,15 @@ class Welcome extends Component<IProps,IStates> {
         }
     }
 
-    UNSAFE_componentWillReceiveProps(newProps: IProps) {
-        console.log(newProps.isLogin);
-        console.log(this.props.isLogin);
-        if(newProps.isLogin && !this.props.isLogin) {
-            // console.log('before',_history);
-            this.props.goto('/model');
-            // console.log('after',_history);
-        }
-    }
+    // UNSAFE_componentWillReceiveProps(newProps: IProps) {
+    //     console.log(newProps.isLogin);
+    //     console.log(this.props.isLogin);
+    //     if(newProps.isLogin && !this.props.isLogin) {
+    //         // console.log('before',_history);
+    //         this.props.goto('/model');
+    //         // console.log('after',_history);
+    //     }
+    // }
 
     render() {
         const NavProps = {

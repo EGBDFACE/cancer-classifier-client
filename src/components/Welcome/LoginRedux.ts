@@ -1,7 +1,7 @@
 import { fetchGetSalt, fetchLogin } from 'src/api';
 import { hmacTime } from 'src/utils/hmacTime';
-import { store } from 'src/index';
-import { IStoreState } from 'src/redux/reducer';
+// import { IStoreState } from 'src/redux/reducer';
+import { push } from 'connected-react-router';
 
 export interface ILoginState {
     errMsg: any,
@@ -38,12 +38,12 @@ export interface IUserInfo {
     password: string
 }
 
-function getLoginParamsWithState (params: IUserInfo, getState: any) {
-    return {
-        username: params.username,
-        password: hmacTime(params.password, getState().welcome.login.salt)
-    }
-}
+// function getLoginParamsWithState (params: IUserInfo, getState: any) {
+//     return {
+//         username: params.username,
+//         password: hmacTime(params.password, getState().welcome.login.salt)
+//     }
+// }
 
 // export function login (params: IUserInfo) {
 //     const getSaltParams = {username: params.username};
@@ -87,11 +87,16 @@ function getLoginParamsWithState (params: IUserInfo, getState: any) {
 //     }
 // }
 
-async function loginWithSalt (params: IUserInfo, salt: string) {
+function loginSuccess () {
+    return push('/model');
+}
+
+function loginWithSalt (params: IUserInfo, salt: string) {
     const loginParams = { ...params, password: hmacTime(params.password, salt)};
     return {
         types: [null, LOGIN_SUCCESS, LOGIN_WRONG, LOGIN_ERROR],
         func: fetchLogin(loginParams),
+        payload: loginSuccess()
     }
 }
 
@@ -102,7 +107,7 @@ async function loginWithSalt (params: IUserInfo, salt: string) {
 //     }
 // }
 
-export async function login (params: IUserInfo) {
+export function login (params: IUserInfo) {
     const startLogin = new Promise( (resolve, reject) => {
         resolve({
             type: GET_SALT_ING
